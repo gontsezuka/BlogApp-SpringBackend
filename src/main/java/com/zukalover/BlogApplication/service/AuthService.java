@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.zukalover.BlogApplication.dto.RegisterRequest;
+import com.zukalover.BlogApplication.model.NotificationEmail;
 import com.zukalover.BlogApplication.model.User;
 import com.zukalover.BlogApplication.model.VerificationToken;
 import com.zukalover.BlogApplication.repo.UserRepository;
@@ -32,6 +33,9 @@ public class AuthService {
 	@Autowired
 	private VerificationTokenRepository verificationTokenRepository;
 	
+	@Autowired
+	private MailService mailService;
+	
 	
 	/**
 	 * Description: Registering User
@@ -53,6 +57,10 @@ public class AuthService {
 		//SEND VERIFICATION TOKEN
 		//SENDING THE TOKEN IN EMAIL WILL REQUIRE THYMELEAF DEPENDENCY
 		String token = generateVerificationToken(user);
+		
+		mailService.sendMail(new NotificationEmail("Please Activate your Account",user.getEmail(),"Thank your for signing up for our Blog"+
+		"application, please click link below to activate account: "+
+				"http://localhost:8080/api/auth/accountVerification/"+token));
 	}
 	
 	private String generateVerificationToken(User user)
