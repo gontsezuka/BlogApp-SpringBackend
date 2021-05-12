@@ -43,4 +43,60 @@ public class Post {
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	private SubPost subPost;
 	
+	public Post()
+	{
+		
+	}
+	
+	public Long getPostId() {
+		return postId;
+	}
+	public void setPostId(Long postId) {
+		this.postId = postId;
+	}
+	public String getPostName() {
+		return postName;
+	}
+	public void setPostName(String postName) {
+		this.postName = postName;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public Integer getVoteCount() {
+		return voteCount;
+	}
+	public void setVoteCount(Integer voteCount) {
+		this.voteCount = voteCount;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public Instant getCreatedDate() {
+		return createdDate;
+	}
+	public void setCreatedDate(Instant createdDate) {
+		this.createdDate = createdDate;
+	}
+	public SubPost getSubPost() {
+		return subPost;
+	}
+	public void setSubPost(SubPost subPost) {
+		this.subPost = subPost;
+	}
+	
+	
+	
 }

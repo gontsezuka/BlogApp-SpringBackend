@@ -31,4 +31,42 @@ public class Comment {
 	@ManyToOne(targetEntity=User.class,cascade=CascadeType.ALL)
 	@JoinColumn(name="userId")
 	private User user;
+	
+	public Comment()
+	{
+		
+	}
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public String getText() {
+		return text;
+	}
+	public void setText(String text) {
+		this.text = text;
+	}
+	public Post getPost() {
+		return post;
+	}
+	public void setPost(Post post) {
+		this.post = post;
+	}
+	public Instant getCreatedDate() {
+		return createdDate;
+	}
+	public void setCreatedDate(Instant createdDate) {
+		this.createdDate = createdDate;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	
 }
