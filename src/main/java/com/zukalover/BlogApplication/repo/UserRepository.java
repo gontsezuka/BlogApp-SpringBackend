@@ -1,6 +1,9 @@
 package com.zukalover.BlogApplication.repo;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.zukalover.BlogApplication.model.User;
@@ -8,4 +11,6 @@ import com.zukalover.BlogApplication.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User,Long> {
 
+	@Query(value="SELECT * FROM user u WHERE u.username = ?1",nativeQuery=true)
+	Optional<User> findUserByUsername(String username);
 }

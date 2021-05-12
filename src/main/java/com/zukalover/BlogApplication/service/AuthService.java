@@ -1,6 +1,7 @@
 package com.zukalover.BlogApplication.service;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.zukalover.BlogApplication.dto.RegisterRequest;
+import com.zukalover.BlogApplication.exceptions.BlogApplicationException;
 import com.zukalover.BlogApplication.model.NotificationEmail;
 import com.zukalover.BlogApplication.model.User;
 import com.zukalover.BlogApplication.model.VerificationToken;
@@ -71,5 +73,27 @@ public class AuthService {
 		verificationToken.setUser(user);
 		verificationTokenRepository.save(verificationToken);
 		return token;
+	}
+	
+	/**
+	 * @author zukaLover
+	 * @param token
+	 */
+	public void verifyAccount(String token)
+	{
+		Optional<VerificationToken> fromDBToken = verificationTokenRepository.findByToken(token);
+		fromDBToken.orElseThrow(() -> new BlogApplicationException("Invalid Token"));
+		fetchAndEnableUser(fromDBToken.get());
+	}
+	
+	//30
+	@Transactional
+	private void fetchAndEnableUser(VerificationToken verificationToken)
+	{
+	
+		String username = verificationToken.getUser().getUsername();
+		User returnedUser = userRepository.findUserByUsername(username).orElseThrow(()->new BlogApplicationException("Invalid User"));
+		returnedUser.setEnabled(true);
+		userRepository.save(returnedUser);
 	}
 }
