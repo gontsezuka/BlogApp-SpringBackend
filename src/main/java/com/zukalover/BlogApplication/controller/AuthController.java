@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zukalover.BlogApplication.dto.AuthenticationResponse;
+import com.zukalover.BlogApplication.dto.LoginRequest;
 import com.zukalover.BlogApplication.dto.RegisterRequest;
 import com.zukalover.BlogApplication.service.AuthService;
 
@@ -32,5 +34,11 @@ public class AuthController {
 	{
 		authService.verifyAccount(token);
 		return new ResponseEntity<>("Account Activated Successfully",HttpStatus.OK);
+	}
+	
+	@PostMapping("/login")
+	public AuthenticationResponse login(@RequestBody LoginRequest loginRequest)
+	{
+		return authService.login(loginRequest);
 	}
 }

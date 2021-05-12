@@ -7,9 +7,15 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.zukalover.BlogApplication.dto.AuthenticationResponse;
+import com.zukalover.BlogApplication.dto.LoginRequest;
 import com.zukalover.BlogApplication.dto.RegisterRequest;
 import com.zukalover.BlogApplication.exceptions.BlogApplicationException;
 import com.zukalover.BlogApplication.model.NotificationEmail;
@@ -17,6 +23,7 @@ import com.zukalover.BlogApplication.model.User;
 import com.zukalover.BlogApplication.model.VerificationToken;
 import com.zukalover.BlogApplication.repo.UserRepository;
 import com.zukalover.BlogApplication.repo.VerificationTokenRepository;
+import com.zukalover.BlogApplication.security.JwtProvider;
 
 /**
  * Class responsible for handling Authentication services
@@ -37,6 +44,15 @@ public class AuthService {
 	
 	@Autowired
 	private MailService mailService;
+	
+	/**
+	 * Specify specifically which bean to create in Security Config
+	 */
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private JwtProvider jwtProvider;
 	
 	
 	/**
@@ -95,5 +111,22 @@ public class AuthService {
 		User returnedUser = userRepository.findUserByUsername(username).orElseThrow(()->new BlogApplicationException("Invalid User"));
 		returnedUser.setEnabled(true);
 		userRepository.save(returnedUser);
+	}
+	
+	/**
+	 * @author zukaLover
+	 * 
+	 * @param loginRequest
+	 */
+	public AuthenticationResponse login(LoginRequest loginRequest)
+	{
+		Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),loginRequest.getPassword()));
+		//STORE THE AUTHENTICATION OBJECT INSIDE SECURITY CONTEXT
+		SecurityContextHolder.getContext().setAuthentication(authenticate);
+		//THE SECURITY CONTEXT TO BE USED TO CHECK IF USER IS LOGGED IN
+		
+		String token = jwtProvider.generateToken(authenticate);
+		return new AuthenticationResponse(token,loginRequest.getUsername());
+		
 	}
 }
