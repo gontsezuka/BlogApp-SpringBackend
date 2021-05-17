@@ -129,4 +129,12 @@ public class AuthService {
 		return new AuthenticationResponse(token,loginRequest.getUsername());
 		
 	}
+	
+	
+	public User getCurrentUser()
+	{
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Optional<User> user = userRepository.findUserByUsername(username);
+		return user.get();
+	}
 }

@@ -48,6 +48,17 @@ public class Post {
 		
 	}
 	
+	public Post(String postName,String url,String description,Integer voteCount, User user,Instant createdDate,SubPost subPost)
+	{
+		this.postName = postName;
+		this.url = url;
+		this.description = description;
+		this.voteCount = voteCount;
+		this.user = user;
+		this.createdDate = createdDate;
+		this.subPost = subPost;
+	}
+	
 	public Long getPostId() {
 		return postId;
 	}
