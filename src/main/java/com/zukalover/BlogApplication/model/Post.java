@@ -3,6 +3,7 @@ package com.zukalover.BlogApplication.model;
 import java.time.Instant;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,13 +28,16 @@ public class Post {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="post_id")
 	private Long postId;
+	@Column(name="post_name")
 	private String postName;
 	@Nullable
 	private String url;
 	@Nullable
 	@Lob
 	private String description;
+	@Column(name="vote_count")
 	private Integer voteCount;
 	@ManyToOne(targetEntity=User.class,cascade=CascadeType.ALL)
 	@JoinColumn(name= "userId")
