@@ -3,6 +3,7 @@ package com.zukalover.BlogApplication.service;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -16,6 +17,7 @@ import com.zukalover.BlogApplication.model.SubPost;
 import com.zukalover.BlogApplication.model.User;
 import com.zukalover.BlogApplication.repo.PostRepository;
 import com.zukalover.BlogApplication.repo.SubPostRepository;
+import com.zukalover.BlogApplication.repo.UserRepository;
 
 @Service
 @Transactional
@@ -30,6 +32,9 @@ public class PostService {
 	
 	@Autowired
 	private PostRepository postRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	public void createPost(PostRequest postRequest)
 	{
@@ -56,7 +61,7 @@ public class PostService {
 	}
 	
 	
-	public List<PostResponse> getPostBySubPost(Long subPostId)
+	public List<PostResponse> getPostsBySubPost(Long subPostId)
 	{
 		List<Post> allPosts = new ArrayList<>();
 		List<PostResponse> allPostResponses = new ArrayList<>();
@@ -71,6 +76,22 @@ public class PostService {
 		return allPostResponses;
 	}
 	
+	public List<PostResponse> getPostsByUsername(String username)
+	{
+		
+		Optional<User >user = userRepository.findUserByUsername(username);
+		List<Post> allPosts = new ArrayList<>();
+		List<PostResponse> allPostResponses= new ArrayList<>();
+		allPosts = postRepository.findAllPostsByUserId(user.get().getUserId());
+		
+		for(Post post: allPosts)
+		{
+			allPostResponses.add(new PostResponse(post.getPostId(),post.getSubPost().getName(),post.getPostName(),post.getUrl(),post.getDescription()));
+			
+		}
+		
+		return allPostResponses;
+	}
 	
 	public PostResponse findPostById(Long postId)
 	{
@@ -84,6 +105,8 @@ public class PostService {
 		postResponse.setUrl(postReturned.getUrl());
 		postResponse.setSubPostName(postReturned.getSubPost().getName());
 		return postResponse;
-	
 	}
+	
+	
+	
 }
