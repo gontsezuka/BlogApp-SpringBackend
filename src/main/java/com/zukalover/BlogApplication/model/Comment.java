@@ -38,6 +38,23 @@ public class Comment {
 		
 	}
 	
+	public Comment(String text, Post post, Instant createdDate, User user)
+	{
+		this.text = text;
+		this.post = post;
+		this.createdDate = createdDate;
+		this.user = user;
+	}
+	
+	public Comment(Long id,String text, Post post, Instant createdDate, User user)
+	{
+		this.id = id;
+		this.text = text;
+		this.post = post;
+		this.createdDate = createdDate;
+		this.user = user;
+	}
+	
 	public Long getId() {
 		return id;
 	}

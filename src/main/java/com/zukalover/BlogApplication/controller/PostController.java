@@ -19,7 +19,7 @@ import com.zukalover.BlogApplication.service.PostService;
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
-	
+	//1-15
 	@Autowired
 	private PostService postService;
 
@@ -35,13 +35,13 @@ public class PostController {
 		return ResponseEntity.status(HttpStatus.OK).body(postService.findAllPosts());
 	}
 	
-	@GetMapping("/get-all-posts-by-subpost/{subpostid}")
+	@GetMapping("/get-by-subpost/{subpostid}")
 	public ResponseEntity<List<PostResponse>> getAllPostsBySubPost(@PathVariable("subpostid")Long subPostId)
 	{
 		return ResponseEntity.status(HttpStatus.OK).body(postService.getPostsBySubPost(subPostId));
 	}
 	
-	@GetMapping("/get-all-posts-by-username/{username}")
+	@GetMapping("/get-by-username/{username}")
 	public ResponseEntity<List<PostResponse>> getAllPostsByUsername(@PathVariable("username")String username)
 	{
 		return ResponseEntity.status(HttpStatus.OK).body(postService.getPostsByUsername(username));
