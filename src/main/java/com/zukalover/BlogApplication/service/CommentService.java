@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.zukalover.BlogApplication.dto.CommentDto;
 import com.zukalover.BlogApplication.model.Comment;
+import com.zukalover.BlogApplication.model.NotificationEmail;
 import com.zukalover.BlogApplication.model.Post;
 import com.zukalover.BlogApplication.model.User;
 import com.zukalover.BlogApplication.repo.CommentRepository;
