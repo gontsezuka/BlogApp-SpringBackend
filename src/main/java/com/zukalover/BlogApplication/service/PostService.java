@@ -12,12 +12,16 @@ import org.springframework.stereotype.Service;
 
 import com.zukalover.BlogApplication.dto.PostRequest;
 import com.zukalover.BlogApplication.dto.PostResponse;
+import com.zukalover.BlogApplication.model.Comment;
 import com.zukalover.BlogApplication.model.Post;
 import com.zukalover.BlogApplication.model.SubPost;
 import com.zukalover.BlogApplication.model.User;
+import com.zukalover.BlogApplication.model.Vote;
+import com.zukalover.BlogApplication.repo.CommentRepository;
 import com.zukalover.BlogApplication.repo.PostRepository;
 import com.zukalover.BlogApplication.repo.SubPostRepository;
 import com.zukalover.BlogApplication.repo.UserRepository;
+import com.zukalover.BlogApplication.repo.VoteRepository;
 
 @Service
 @Transactional
@@ -35,6 +39,12 @@ public class PostService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private VoteRepository voteRepository;
+	
+	@Autowired
+	private CommentRepository commentRepository;
 	
 	public void createPost(PostRequest postRequest)
 	{
@@ -79,6 +89,7 @@ public class PostService {
 	public List<PostResponse> getPostsByUsername(String username)
 	{
 		
+		String te = TimeAgo.using(System.currentTimeMillis());
 		Optional<User >user = userRepository.findUserByUsername(username);
 		List<Post> allPosts = new ArrayList<>();
 		List<PostResponse> allPostResponses= new ArrayList<>();
@@ -86,7 +97,9 @@ public class PostService {
 		
 		for(Post post: allPosts)
 		{
-			allPostResponses.add(new PostResponse(post.getPostId(),post.getSubPost().getName(),post.getPostName(),post.getUrl(),post.getDescription()));
+			List<Comment> allComments = commentRepository.findCommentByPostId(post.getPostId());
+			List<Vote> allVotes = voteRepository.findAllVotesByPostId(post.getPostId());
+			allPostResponses.add(new PostResponse(post.getPostId(),post.getSubPost().getName(),post.getPostName(),post.getUrl(),post.getDescription(),allComments.size(),allVotes.size(),"TIMEAGO"));
 			
 		}
 		

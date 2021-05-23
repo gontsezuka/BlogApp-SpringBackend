@@ -48,10 +48,9 @@ public class CommentService {
 		commentRepository.save(new Comment(commentDto.getText(),post,Instant.now(),user.get()));
 	
 		//SEND NOTIFICATION EMAIL FOR FOR COMMENT
-		
+		//1-25
 		String message = mailContentBuilder.build(post.getUser().getUsername() +" a comment was posted on your post"+ post.getUrl());
 		sendCommentNotification(message,post.getUser());
-		
 		
 	}
 	
@@ -59,14 +58,49 @@ public class CommentService {
 	{
 		mailService.sendMail(new NotificationEmail(user.getUsername()+"commented on post",user.getEmail(),message));
 	}
+	
+	//1-28
 	public List<CommentDto> getAllCommentsByPostId(Long postId)
 	{
-		List<Comment> comments = new ArrayList<>();
-		comments = commentRepository.findCommentByPostId(postId);
+		List<CommentDto> commentList = new ArrayList<>();
 		
+		Post post = new Post();
+		post = postRepository.findPostById(postId);
+		if(post !=null)
+		{
+			List<Comment> comments = new ArrayList<>();
+			comments = commentRepository.findCommentByPostId(postId);
+			
+			for(Comment comment: comments)
+			{
+				commentList.add(new CommentDto(comment.getId(),comment.getPost().getPostId(),comment.getCreatedDate(),comment.getText(),comment.getUser().getUsername()));
+			}
+		}
+	
+		return commentList;
 		
+	}
+	
+	public List<CommentDto> getAllCommentsForUser(String username)
+	{
+		List<CommentDto> commentList = new ArrayList<>();
+		Optional<User> user = userRepository.findUserByUsername(username);
 		
+		if(user.get() !=null)
+		{
+			List<Comment> commentsByUser =new  ArrayList<>();
+			commentsByUser = commentRepository.findCommentByUser(user.get().getUserId());
+			
+			for(Comment comment: commentsByUser)
+			{
+				
+				commentList.add(new CommentDto(comment.getId(),comment.getPost().getPostId(),comment.getCreatedDate(),comment.getText(),comment.getUser().getUsername()));
+				
+			}
+			
+		}
 		
+		return commentList;
 	}
 
 }

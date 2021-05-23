@@ -26,19 +26,19 @@ public class CommentController {
 	public ResponseEntity<Void> createComment(@RequestBody CommentDto commentDto)
 	{
 		commentService.createComment(commentDto);
-		return new ResponseEntity(HttpStatus.CREATED);
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/get-by-post/{postid}")
 	public ResponseEntity<List<CommentDto>> getAllCommentsByPost(@PathVariable("postid")Long postId)
 	{
-		
+		return ResponseEntity.status(HttpStatus.OK).body(commentService.getAllCommentsByPostId(postId));
 	}
 	
 	@GetMapping("/get-by-user/{username}")
 	public ResponseEntity<List<CommentDto>> getAllCommentsByUser(@PathVariable("username")String username)
 	{
-		
+		return ResponseEntity.status(HttpStatus.OK).body(commentService.getAllCommentsForUser(username));
 	}
 	
 }

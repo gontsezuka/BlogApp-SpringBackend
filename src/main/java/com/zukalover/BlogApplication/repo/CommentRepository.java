@@ -12,6 +12,8 @@ import com.zukalover.BlogApplication.model.Comment;
 public interface CommentRepository extends JpaRepository<Comment,Long> {
 
 	@Query(value="SELECT * FROM comment WHERE postid = ?1", nativeQuery=true)
-	public List<Comment> findCommentByPostId(Long postid);
+	public List<Comment> findCommentByPostId(Long postId);
 
+	@Query(value="SELECT * FROM comment WHERE userid = ?1", nativeQuery=true)
+	public List<Comment> findCommentByUser(Long userId);
 }
