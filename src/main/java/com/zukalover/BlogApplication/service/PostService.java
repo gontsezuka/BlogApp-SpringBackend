@@ -88,8 +88,8 @@ public class PostService {
 	
 	public List<PostResponse> getPostsByUsername(String username)
 	{
+		// Check Time Ago
 		
-		String te = TimeAgo.using(System.currentTimeMillis());
 		Optional<User >user = userRepository.findUserByUsername(username);
 		List<Post> allPosts = new ArrayList<>();
 		List<PostResponse> allPostResponses= new ArrayList<>();
